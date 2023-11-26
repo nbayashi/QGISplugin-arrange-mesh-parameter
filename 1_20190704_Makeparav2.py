@@ -240,14 +240,12 @@ for feature in spJoin2['OUTPUT'].getFeatures():
     # selectedpolygon = ディソルブポリゴンから、該当するpagenumberのポリゴンだけを抽出
     expression = '"PageNumber" =  \'' + str(pageNum) + '\''
     request = QgsFeatureRequest().setFilterExpression(expression)
-    #selectedpolygon = processing.run("qgis:selectbyattribute", {'INPUT': dissolvedVeg['OUTPUT'], 'FIELD': 'PageNumber', 'OPERATOR': 0, 'VALUE': pageNum, 'METHOD': 0})
     # Make veg and area dictionary
     veg_dict = {}
     for veg_feature in dissolvedVeg['OUTPUT'].getFeatures(request):
         veg_dict[veg_feature['veg']] = veg_feature['area']
     # find max area veg
     max_veg = max(veg_dict, key=veg_dict.get)
-    # edit_layer.dataProvider().changeAttributeValues({QgsFeatureId:{fieldindex:"updateTest"}})
     new_value = {feature.fieldNameIndex("mainVeg"): max_veg}
     spJoin2['OUTPUT'].dataProvider().changeAttributeValues({
         feature.id(): new_value})
